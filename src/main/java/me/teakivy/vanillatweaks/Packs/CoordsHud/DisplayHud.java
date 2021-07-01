@@ -11,7 +11,7 @@ public class DisplayHud implements Listener {
 
 
     public static void showHud(Player player) {
-        String display = ChatColor.GOLD + "XYZ: " + ChatColor.WHITE + Math.round(player.getLocation().getX()) + " " + Math.round(player.getLocation().getY()) + " " + Math.round(player.getLocation().getZ()) + "  " + ChatColor.GOLD + getDirection(player) + "      " + getWorldTime(player);
+        String display = ChatColor.GOLD + "XYZ: " + ChatColor.WHITE + (int) Math.floor(player.getLocation().getX()) + " " + (int) Math.floor(player.getLocation().getY()) + " " + (int) Math.floor(player.getLocation().getZ()) + "  " + ChatColor.GOLD + getDirection(player) + "      " + getWorldTime(player);
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(display));
     }
 
@@ -31,8 +31,8 @@ public class DisplayHud implements Listener {
     public static String getWorldTime(Player player) {
         World world = player.getWorld();
         long ticks = world.getTime();
-        int hours = Math.round(((ticks / 1000) + 6) % 24);
-        int minutes = (int) Math.round((ticks % 1000 / 10) * 0.6);
+        int hours = (int) Math.floor((ticks / 1000) + 6) % 24;
+        int minutes = (int) Math.floor((ticks % 1000 / 10) * 0.6);
         return String.format("%02d:%02d", hours, minutes);
     }
 
