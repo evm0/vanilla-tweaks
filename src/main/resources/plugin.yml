@@ -32,4 +32,7 @@ commands:
     aliases: [killboats]
   test:
     description: Test Command
+  rtc:
+    description: View a world's Real Time
+    aliases: [realtime, realtimeclock]
 
