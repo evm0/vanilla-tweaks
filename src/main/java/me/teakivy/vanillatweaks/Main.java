@@ -1,13 +1,15 @@
 package me.teakivy.vanillatweaks;
 
 import me.teakivy.vanillatweaks.Commands.*;
+import me.teakivy.vanillatweaks.CraftingTweaks.CraftingRegister;
 import me.teakivy.vanillatweaks.Packs.AntiCreeperGreif.AntiCreeper;
 import me.teakivy.vanillatweaks.Packs.AntiEndermanGrief.AntiEnderman;
 import me.teakivy.vanillatweaks.Packs.AntiGhastGrief.AntiGhast;
+import me.teakivy.vanillatweaks.Packs.CauldronConcrete.ConcreteConverter;
 import me.teakivy.vanillatweaks.Packs.CoordsHud.DisplayHud;
 import me.teakivy.vanillatweaks.Packs.DoubleShulkerShells.DoubleShulkers;
 import me.teakivy.vanillatweaks.Packs.MoreMobHeads.MobHeads;
-import me.teakivy.vanillatweaks.Packs.MoreMobHeads.Mobs.Cow;
+import me.teakivy.vanillatweaks.Packs.MultiplayerSleep.MultiplayerSleep;
 import me.teakivy.vanillatweaks.Packs.PlayerHeadDrops.HeadDrop;
 import me.teakivy.vanillatweaks.Packs.SilenceMobs.Silencer;
 import me.teakivy.vanillatweaks.Commands.TabCompleter.chTab;
@@ -15,7 +17,7 @@ import me.teakivy.vanillatweaks.Commands.TabCompleter.vtTab;
 import me.teakivy.vanillatweaks.Packs.SpectatorConduitPower.ConduitPower;
 import me.teakivy.vanillatweaks.Packs.SpectatorNightVision.NightVision;
 import me.teakivy.vanillatweaks.Utils.DataManager.DataManager;
-import org.bukkit.Bukkit;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,7 +29,7 @@ import java.util.UUID;
 
 public final class Main extends JavaPlugin implements Listener {
 
-    String[] packList = {"player-head-drops", "double-shulker-shells", "dragon-drops", "silence-mobs", "anti-creeper-grief", "anti-enderman-grief", "anti-ghast-grief", "nether-portal-coords", "coords-hud", "spectator-night-vision", "spectator-conduit-power", "kill-boats", "more-mob-heads"};
+    String[] packList = {"player-head-drops", "double-shulker-shells", "dragon-drops", "silence-mobs", "anti-creeper-grief", "anti-enderman-grief", "anti-ghast-grief", "nether-portal-coords", "coords-hud", "spectator-night-vision", "spectator-conduit-power", "kill-boats", "more-mob-heads", "multiplayer-sleep", "unlock-all-recipes", "cauldron-concrete", "real-time-clock"};
 
     public static ArrayList<UUID> chEnabled = new ArrayList<>();
 
@@ -35,6 +37,16 @@ public final class Main extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+
+        // Crafting Tweaks
+        CraftingRegister.register();
+
+        // Unlock All Recipes Pack
+        if (this.getConfig().getBoolean("packs.unlock-all-recipes.enabled")) {
+            for (World world : getServer().getWorlds()) {
+                world.setGameRule(GameRule.DO_LIMITED_CRAFTING, false);
+            }
+        }
 
         // Data Manager
         this.data = new DataManager(this);
@@ -48,6 +60,7 @@ public final class Main extends JavaPlugin implements Listener {
         this.getCommand("cp").setExecutor(new cpCommand());
         this.getCommand("killboat").setExecutor(new KillBoatsCommand());
         this.getCommand("test").setExecutor(new testCommand());
+        this.getCommand("rtc").setExecutor(new rtcCommand());
 
         // Tab Completer
         this.getCommand("vt").setTabCompleter(new vtTab());
@@ -79,6 +92,8 @@ public final class Main extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new NightVision(), this);
         getServer().getPluginManager().registerEvents(new ConduitPower(), this);
         getServer().getPluginManager().registerEvents(new MobHeads(), this);
+        getServer().getPluginManager().registerEvents(new MultiplayerSleep(), this);
+        getServer().getPluginManager().registerEvents(new ConcreteConverter(), this);
 
 
 
@@ -162,6 +177,19 @@ public final class Main extends JavaPlugin implements Listener {
         if (pack.equals("more-mob-heads")) {
             return "More Mob Heads";
         }
+        if (pack.equals("multiplayer-sleep")) {
+            return "Multiplayer Sleep";
+        }
+        if (pack.equals("unlock-all-recipes")) {
+            return "Unlock All Recipes";
+        }
+        if (pack.equals("cauldron-concrete")) {
+            return "Cauldron Concrete";
+        }
+        if (pack.equals("real-time-clock")) {
+            return "Real Time CLock";
+        }
+
         return pack;
     }
 }
