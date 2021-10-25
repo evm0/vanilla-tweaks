@@ -17,6 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -24,82 +28,97 @@ public class MobHeads implements Listener {
 
     static Main main = Main.getPlugin(Main.class);
 
+    static Map<EntityType, Method> mobs = new HashMap<>();
+    static {
+        try {
+            Class<?>[] args = new Class[1];
+            args[0] = EntityDeathEvent.class;
+
+            mobs.put(EntityType.AXOLOTL, Axolotl.class.getMethod("onDeath", args));
+            mobs.put(EntityType.BAT, Bat.class.getMethod("onDeath", args));
+            mobs.put(EntityType.BEE, Bee.class.getMethod("onDeath", args));
+            mobs.put(EntityType.BLAZE, Blaze.class.getMethod("onDeath", args));
+            mobs.put(EntityType.CAT, Cat.class.getMethod("onDeath", args));
+            mobs.put(EntityType.CAVE_SPIDER, CaveSpider.class.getMethod("onDeath", args));
+            mobs.put(EntityType.CHICKEN, Chicken.class.getMethod("onDeath", args));
+            mobs.put(EntityType.COD, Cod.class.getMethod("onDeath", args));
+            mobs.put(EntityType.COW, Cow.class.getMethod("onDeath", args));
+            mobs.put(EntityType.CREEPER, Creeper.class.getMethod("onDeath", args));
+            mobs.put(EntityType.DOLPHIN, Dolphin.class.getMethod("onDeath", args));
+            mobs.put(EntityType.DONKEY, Donkey.class.getMethod("onDeath", args));
+            mobs.put(EntityType.DROWNED, Drowned.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ELDER_GUARDIAN, ElderGuardian.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ENDER_DRAGON, EnderDragon.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ENDERMAN, Enderman.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ENDERMITE, Endermite.class.getMethod("onDeath", args));
+            mobs.put(EntityType.EVOKER, Evoker.class.getMethod("onDeath", args));
+            mobs.put(EntityType.FOX, Fox.class.getMethod("onDeath", args));
+            mobs.put(EntityType.GHAST, Ghast.class.getMethod("onDeath", args));
+            mobs.put(EntityType.GLOW_SQUID, GlowSquid.class.getMethod("onDeath", args));
+            mobs.put(EntityType.GOAT, Goat.class.getMethod("onDeath", args));
+            mobs.put(EntityType.GUARDIAN, Guardian.class.getMethod("onDeath", args));
+            mobs.put(EntityType.HOGLIN, Hoglin.class.getMethod("onDeath", args));
+            mobs.put(EntityType.HORSE, Horse.class.getMethod("onDeath", args));
+            mobs.put(EntityType.HUSK, Husk.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ILLUSIONER, Illusioner.class.getMethod("onDeath", args));
+            mobs.put(EntityType.IRON_GOLEM, IronGolem.class.getMethod("onDeath", args));
+            mobs.put(EntityType.LLAMA, Llama.class.getMethod("onDeath", args));
+            mobs.put(EntityType.MAGMA_CUBE, MagmaCube.class.getMethod("onDeath", args));
+            mobs.put(EntityType.MUSHROOM_COW, Mooshroom.class.getMethod("onDeath", args));
+            mobs.put(EntityType.MULE, Mule.class.getMethod("onDeath", args));
+            mobs.put(EntityType.OCELOT, Ocelot.class.getMethod("onDeath", args));
+            mobs.put(EntityType.PANDA, Panda.class.getMethod("onDeath", args));
+            mobs.put(EntityType.PARROT, Parrot.class.getMethod("onDeath", args));
+            mobs.put(EntityType.PHANTOM, Phantom.class.getMethod("onDeath", args));
+            mobs.put(EntityType.PIG, Pig.class.getMethod("onDeath", args));
+            mobs.put(EntityType.PIGLIN, Piglin.class.getMethod("onDeath", args));
+            mobs.put(EntityType.PIGLIN_BRUTE, PiglinBrute.class.getMethod("onDeath", args));
+            mobs.put(EntityType.PILLAGER, Pillager.class.getMethod("onDeath", args));
+            mobs.put(EntityType.POLAR_BEAR, PolarBear.class.getMethod("onDeath", args));
+            mobs.put(EntityType.PUFFERFISH, Pufferfish.class.getMethod("onDeath", args));
+            mobs.put(EntityType.RABBIT, Rabbit.class.getMethod("onDeath", args));
+            mobs.put(EntityType.RAVAGER, Ravager.class.getMethod("onDeath", args));
+            mobs.put(EntityType.SALMON, Salmon.class.getMethod("onDeath", args));
+            mobs.put(EntityType.SHULKER, Shulker.class.getMethod("onDeath", args));
+            mobs.put(EntityType.SILVERFISH, Silverfish.class.getMethod("onDeath", args));
+            mobs.put(EntityType.SKELETON_HORSE, SkeletonHorse.class.getMethod("onDeath", args));
+            mobs.put(EntityType.SLIME, Slime.class.getMethod("onDeath", args));
+            mobs.put(EntityType.SNOWMAN, SnowGolem.class.getMethod("onDeath", args));
+            mobs.put(EntityType.SPIDER, Spider.class.getMethod("onDeath", args));
+            mobs.put(EntityType.SQUID, Squid.class.getMethod("onDeath", args));
+            mobs.put(EntityType.STRAY, Stray.class.getMethod("onDeath", args));
+            mobs.put(EntityType.STRIDER, Strider.class.getMethod("onDeath", args));
+            mobs.put(EntityType.TRADER_LLAMA, TraderLlama.class.getMethod("onDeath", args));
+            mobs.put(EntityType.TROPICAL_FISH, TropicalFish.class.getMethod("onDeath", args));
+            mobs.put(EntityType.TURTLE, Turtle.class.getMethod("onDeath", args));
+            mobs.put(EntityType.VEX, Vex.class.getMethod("onDeath", args));
+            mobs.put(EntityType.VILLAGER, Villager.class.getMethod("onDeath", args));
+            mobs.put(EntityType.VINDICATOR, Vindicator.class.getMethod("onDeath", args));
+            mobs.put(EntityType.WANDERING_TRADER, WanderingTrader.class.getMethod("onDeath", args));
+            mobs.put(EntityType.WITCH, Witch.class.getMethod("onDeath", args));
+            mobs.put(EntityType.WITHER, Wither.class.getMethod("onDeath", args));
+            mobs.put(EntityType.WOLF, Wolf.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ZOGLIN, Zoglin.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ZOMBIE_HORSE, ZombieHorse.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ZOMBIE_VILLAGER, ZombieVillager.class.getMethod("onDeath", args));
+            mobs.put(EntityType.ZOMBIFIED_PIGLIN, ZombifiedPiglin.class.getMethod("onDeath", args));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
     @EventHandler
-    public void onMobDeath(EntityDeathEvent event) {
+    public void onMobDeath(EntityDeathEvent event) throws InvocationTargetException, IllegalAccessException {
         if (event.getEntity().getKiller() == null) return;
         if (!main.getConfig().getBoolean("packs.more-mob-heads.enabled")) return;
 
-        Entity entity = event.getEntity();
+        EntityType entity = event.getEntity().getType();
 
-
-        if (entity.getType().equals(EntityType.AXOLOTL)) Axolotl.onDeath(event);
-        if (entity.getType().equals(EntityType.BAT)) Bat.onDeath(event);
-        if (entity.getType().equals(EntityType.BEE)) Bee.onDeath(event);
-        if (entity.getType().equals(EntityType.BLAZE)) Blaze.onDeath(event);
-        if (entity.getType().equals(EntityType.CAT)) Cat.onDeath(event);
-        if (entity.getType().equals(EntityType.CAVE_SPIDER)) CaveSpider.onDeath(event);
-        if (entity.getType().equals(EntityType.CHICKEN)) Chicken.onDeath(event);
-        if (entity.getType().equals(EntityType.COD)) Cod.onDeath(event);
-        if (entity.getType().equals(EntityType.COW)) Cow.onDeath(event);
-        if (entity.getType().equals(EntityType.CREEPER)) Creeper.onDeath(event);
-        if (entity.getType().equals(EntityType.DOLPHIN)) Dolphin.onDeath(event);
-        if (entity.getType().equals(EntityType.DONKEY)) Donkey.onDeath(event);
-        if (entity.getType().equals(EntityType.DROWNED)) Drowned.onDeath(event);
-        if (entity.getType().equals(EntityType.ELDER_GUARDIAN)) ElderGuardian.onDeath(event);
-        if (entity.getType().equals(EntityType.ENDER_DRAGON)) EnderDragon.onDeath(event);
-        if (entity.getType().equals(EntityType.ENDERMAN)) Enderman.onDeath(event);
-        if (entity.getType().equals(EntityType.ENDERMITE)) Endermite.onDeath(event);
-        if (entity.getType().equals(EntityType.EVOKER)) Evoker.onDeath(event);
-        if (entity.getType().equals(EntityType.FOX)) Fox.onDeath(event);
-        if (entity.getType().equals(EntityType.GHAST)) Ghast.onDeath(event);
-        if (entity.getType().equals(EntityType.GLOW_SQUID)) GlowSquid.onDeath(event);
-        if (entity.getType().equals(EntityType.GOAT)) Goat.onDeath(event);
-        if (entity.getType().equals(EntityType.GUARDIAN)) Guardian.onDeath(event);
-        if (entity.getType().equals(EntityType.HOGLIN)) Hoglin.onDeath(event);
-        if (entity.getType().equals(EntityType.HORSE)) Horse.onDeath(event);
-        if (entity.getType().equals(EntityType.HUSK)) Husk.onDeath(event);
-        if (entity.getType().equals(EntityType.ILLUSIONER)) Illusioner.onDeath(event);
-        if (entity.getType().equals(EntityType.IRON_GOLEM)) IronGolem.onDeath(event);
-        if (entity.getType().equals(EntityType.LLAMA)) Llama.onDeath(event);
-        if (entity.getType().equals(EntityType.MAGMA_CUBE)) MagmaCube.onDeath(event);
-        if (entity.getType().equals(EntityType.MUSHROOM_COW)) Mooshroom.onDeath(event);
-        if (entity.getType().equals(EntityType.MULE)) Mule.onDeath(event);
-        if (entity.getType().equals(EntityType.OCELOT)) Ocelot.onDeath(event);
-        if (entity.getType().equals(EntityType.PANDA)) Panda.onDeath(event);
-        if (entity.getType().equals(EntityType.PARROT)) Parrot.onDeath(event);
-        if (entity.getType().equals(EntityType.PHANTOM)) Phantom.onDeath(event);
-        if (entity.getType().equals(EntityType.PIG)) Pig.onDeath(event);
-        if (entity.getType().equals(EntityType.PIGLIN)) Piglin.onDeath(event);
-        if (entity.getType().equals(EntityType.PIGLIN_BRUTE)) PiglinBrute.onDeath(event);
-        if (entity.getType().equals(EntityType.PILLAGER)) Pillager.onDeath(event);
-        if (entity.getType().equals(EntityType.POLAR_BEAR)) PolarBear.onDeath(event);
-        if (entity.getType().equals(EntityType.PUFFERFISH)) Pufferfish.onDeath(event);
-        if (entity.getType().equals(EntityType.RABBIT)) Rabbit.onDeath(event);
-        if (entity.getType().equals(EntityType.RAVAGER)) Ravager.onDeath(event);
-        if (entity.getType().equals(EntityType.SALMON)) Salmon.onDeath(event);
-        if (entity.getType().equals(EntityType.SHULKER)) Shulker.onDeath(event);
-        if (entity.getType().equals(EntityType.SILVERFISH)) Silverfish.onDeath(event);
-        if (entity.getType().equals(EntityType.SKELETON_HORSE)) SkeletonHorse.onDeath(event);
-        if (entity.getType().equals(EntityType.SLIME)) Slime.onDeath(event);
-        if (entity.getType().equals(EntityType.SNOWMAN)) SnowGolem.onDeath(event);
-        if (entity.getType().equals(EntityType.SPIDER)) Spider.onDeath(event);
-        if (entity.getType().equals(EntityType.SQUID)) Squid.onDeath(event);
-        if (entity.getType().equals(EntityType.STRAY)) Stray.onDeath(event);
-        if (entity.getType().equals(EntityType.STRIDER)) Strider.onDeath(event);
-        if (entity.getType().equals(EntityType.TRADER_LLAMA)) TraderLlama.onDeath(event);
-        if (entity.getType().equals(EntityType.TROPICAL_FISH)) TropicalFish.onDeath(event);
-        if (entity.getType().equals(EntityType.TURTLE)) Turtle.onDeath(event);
-        if (entity.getType().equals(EntityType.VEX)) Vex.onDeath(event);
-        if (entity.getType().equals(EntityType.VILLAGER)) Villager.onDeath(event);
-        if (entity.getType().equals(EntityType.VINDICATOR)) Vindicator.onDeath(event);
-        if (entity.getType().equals(EntityType.WANDERING_TRADER)) WanderingTrader.onDeath(event);
-        if (entity.getType().equals(EntityType.WITCH)) Witch.onDeath(event);
-        if (entity.getType().equals(EntityType.WITHER)) Wither.onDeath(event);
-        if (entity.getType().equals(EntityType.WOLF)) Wolf.onDeath(event);
-        if (entity.getType().equals(EntityType.ZOGLIN)) Zoglin.onDeath(event);
-        if (entity.getType().equals(EntityType.ZOMBIE_HORSE)) ZombieHorse.onDeath(event);
-        if (entity.getType().equals(EntityType.ZOMBIE_VILLAGER)) ZombieVillager.onDeath(event);
-        if (entity.getType().equals(EntityType.ZOMBIFIED_PIGLIN)) ZombifiedPiglin.onDeath(event);
+        try {
+            mobs.get(event.getEntity().getType()).invoke(event);
+        } catch (NoSuchFieldError e) {
+            /* Older versions of minecraft may not have all the mobs. */
+        }
     }
 
     public static ItemStack getHead(String name, String texture) {
